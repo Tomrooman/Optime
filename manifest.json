@@ -3,6 +3,15 @@
   "name": "Create a Chrome Extension with React and Webpack",
   "description": "Demo Chrome Extension that uses React and Webpack",
   "version": "1.0.0",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/",
+    "https://*/"
+  ],
   "action": {
     "default_popup": "index.html"
   },
@@ -11,8 +20,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["contentScript.js"]
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "contentScript.js"
+      ]
     }
   ]
 }
