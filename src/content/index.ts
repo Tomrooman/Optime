@@ -1,8 +1,9 @@
 chrome.runtime.onMessage.addListener(
-  function (msg, sender, sendResponse) {
+  function ({ src, title }, sender, sendResponse) {
+    document.body.innerHTML = '';
     const dogImg: HTMLImageElement = document.createElement('img');
-    dogImg.src = msg;
+    dogImg.src = src;
     document.body.appendChild(dogImg);
-    sendResponse('response ok tom')
+    sendResponse(`response ok tom : ${title}`)
   }
 );

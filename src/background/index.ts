@@ -11,13 +11,12 @@ function getTabInfo(tabId: number) {
         if (lastUrl != tab.url || lastTitle != tab.title) {
             lastUrl = tab.url;
             lastTitle = tab.title;
-            console.log(tab.url, tab.title);
         }
     });
 }
 
 // Event on tab selection
-chrome.tabs.onHighlighted.addListener(function (highlightInfo) {
-    console.log("onHighlighted", { highlightInfo })
-    getTabInfo(highlightInfo.tabIds[0]);
-});
+// chrome.tabs.onHighlighted.addListener(function (highlightInfo) {
+//     console.log("onHighlighted", { highlightInfo })
+//     getTabInfo(highlightInfo.tabIds[0]);
+// });

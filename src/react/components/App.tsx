@@ -33,10 +33,15 @@ const generateDogGif = async () => {
       continue;
     }
 
-    await injectIfNotAsync(tab.id || 0);
+    try {
+      await injectIfNotAsync(tab.id || 0);
+    } catch (e) {
+      console.log(`failed to inject script on tab ${tab}`);
+      continue;
+    }
 
-    const response = await chrome.tabs.sendMessage(tab.id || 0, dogSrc);
-    console.log({ response })
+    // const response = await chrome.tabs.sendMessage(tab.id || 0, { src: dogSrc, title: tab.title });
+    await chrome.tabs.discard(tab.id);
   }
 };
 
