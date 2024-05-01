@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "license": "",
   "private": false,
   "engines": {
@@ -20,7 +19,7 @@
   "author": "Tom Rooman",
   "contributors": [],
   "scripts": {
-    "build": "webpack --config webpack.config.cjs",
+    "build": "webpack --config webpack.config.js",
     "types": "npx tsc"
   },
   "devDependencies": {
