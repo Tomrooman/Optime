@@ -24,8 +24,7 @@ type Tab = chrome.tabs.Tab & {
 const generateDogGif = async () => {
   const tabs = (await chrome.tabs.query({})) as Tab[];
   console.log({ tabs });
-  const scripts = await chrome.scripting.getRegisteredContentScripts({});
-  console.log({ scripts });
+
   for (const tab of tabs) {
     if (tab.active) {
       continue;
@@ -43,7 +42,7 @@ const generateDogGif = async () => {
 
     const response = await chrome.tabs.sendMessage(tab.id || 0, { title: tab.title });
     console.log({ response });
-    // await chrome.tabs.discard(tab.id);
+    await chrome.tabs.discard(tab.id);
   }
 };
 
@@ -62,9 +61,9 @@ const injectIfNotAsync = async (tabId: number) => {
 
   await chrome.scripting.executeScript({
     target: {
-      tabId,
+      tabId
     },
-    files: ["contentScript.js"],
+    files: ["contentScript.js"]
   });
   return tabId;
 };
