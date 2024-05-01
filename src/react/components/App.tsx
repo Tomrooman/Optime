@@ -1,5 +1,3 @@
-const dogSrc: string = 'https://media.tenor.com/fej4_qoxdHYAAAAM/cute-puppy.gif';
-
 type Tab = chrome.tabs.Tab & {
   active: boolean;
   audible: boolean;
@@ -13,7 +11,7 @@ type Tab = chrome.tabs.Tab & {
   incognito: boolean;
   index: number;
   lastAccessed: number;
-  mutedInfo: { muted: boolean }
+  mutedInfo: { muted: boolean };
   pinned: boolean;
   selected: boolean;
   status: string;
@@ -21,17 +19,20 @@ type Tab = chrome.tabs.Tab & {
   url?: string;
   width: number;
   windowId: number;
-}
+};
 
 const generateDogGif = async () => {
-  const tabs = await chrome.tabs.query({}) as Tab[];
-  console.log({ tabs })
-
+  const tabs = (await chrome.tabs.query({})) as Tab[];
+  console.log({ tabs });
+  const scripts = await chrome.scripting.getRegisteredContentScripts({});
+  console.log({ scripts });
   for (const tab of tabs) {
-
-    if (!tab.url?.startsWith('http') || tab.status !== 'complete') {
+    if (tab.active) {
       continue;
     }
+    // if (!tab.url?.startsWith('http') || tab.status !== 'complete') {
+    //   continue;
+    // }
 
     try {
       await injectIfNotAsync(tab.id || 0);
@@ -40,15 +41,16 @@ const generateDogGif = async () => {
       continue;
     }
 
-    // const response = await chrome.tabs.sendMessage(tab.id || 0, { src: dogSrc, title: tab.title });
-    await chrome.tabs.discard(tab.id);
+    const response = await chrome.tabs.sendMessage(tab.id || 0, { title: tab.title });
+    console.log({ response });
+    // await chrome.tabs.discard(tab.id);
   }
 };
 
 const injectIfNotAsync = async (tabId: number) => {
   let injected = false;
   try {
-    await chrome.tabs.sendMessage(tabId, 'ping');
+    await chrome.tabs.sendMessage(tabId, "ping");
     injected = true;
   } catch {
     injected = false;
@@ -60,18 +62,17 @@ const injectIfNotAsync = async (tabId: number) => {
 
   await chrome.scripting.executeScript({
     target: {
-      tabId
+      tabId,
     },
-    files: ["contentScript.js"]
+    files: ["contentScript.js"],
   });
   return tabId;
-}
+};
 
 const App = () => {
   return (
     <main>
-      <h1>Add a Dog Gif to Webpage</h1>
-      <img src={dogSrc} />
+      <h1>Optime</h1>
       <button onClick={generateDogGif}>Generate Dog Gif</button>
     </main>
   );

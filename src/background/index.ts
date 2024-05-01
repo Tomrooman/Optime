@@ -16,7 +16,8 @@ function getTabInfo(tabId: number) {
 }
 
 // Event on tab selection
-// chrome.tabs.onHighlighted.addListener(function (highlightInfo) {
-//     console.log("onHighlighted", { highlightInfo })
-//     getTabInfo(highlightInfo.tabIds[0]);
-// });
+chrome.tabs.onHighlighted.addListener(async (highlightInfo) => {
+    // await chrome.tabs.discard(highlightInfo.tabIds[0]);
+    console.log("onHighlighted", { highlightInfo })
+    getTabInfo(highlightInfo.tabIds[0]);
+});
