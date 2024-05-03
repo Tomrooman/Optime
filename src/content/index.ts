@@ -1,3 +1,5 @@
+// variables values will be unique to each tab
+
 chrome.runtime.onMessage.addListener(function ({ title }, sender, sendResponse) {
   // document.body.innerHTML = "";
   // const dogImg: HTMLImageElement = document.createElement('img');

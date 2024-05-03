@@ -26,23 +26,27 @@ const generateDogGif = async () => {
   console.log({ tabs });
 
   for (const tab of tabs) {
-    if (tab.active) {
+    if (tab.active || !tab.url?.startsWith("http")) {
       continue;
     }
-    // if (!tab.url?.startsWith('http') || tab.status !== 'complete') {
-    //   continue;
-    // }
+
+    await chrome.storage.local.set({ [tab.id]: true });
+    console.log(`local storage discord set ${tab.id}`);
+
+    if (tab.discarded) {
+      continue;
+    }
 
     try {
       await injectIfNotAsync(tab.id || 0);
     } catch (e) {
-      console.log(`failed to inject script on tab ${tab}`);
+      console.log("failed to inject script on tab:", tab);
       continue;
     }
 
-    const response = await chrome.tabs.sendMessage(tab.id || 0, { title: tab.title });
-    console.log({ response });
     await chrome.tabs.discard(tab.id);
+    // const response = await chrome.tabs.sendMessage(tab.id || 0, { title: tab.title });
+    // console.log({ response });
   }
 };
 

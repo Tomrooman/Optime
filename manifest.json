@@ -1,17 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Create a Chrome Extension with React and Webpack",
-  "description": "Demo Chrome Extension that uses React and Webpack",
+  "name": "Optime",
+  "description": "Optimisation des ressources web",
   "version": "1.0.0",
-  "permissions": [
-    "activeTab",
-    "storage",
-    "scripting"
-  ],
-  "host_permissions": [
-    "http://*/",
-    "https://*/"
-  ],
+  "permissions": ["activeTab", "storage", "scripting"],
+  "host_permissions": ["http://*/", "https://*/"],
   "action": {
     "default_popup": "index.html"
   },
@@ -20,12 +13,8 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "contentScript.js"
-      ]
+      "matches": ["<all_urls>"],
+      "js": ["contentScript.js"]
     }
   ]
 }
