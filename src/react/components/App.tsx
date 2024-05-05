@@ -1,25 +1,6 @@
-type Tab = chrome.tabs.Tab & {
-  active: boolean;
-  audible: boolean;
-  autoDiscardable: boolean;
-  discarded: boolean;
-  favIconUrl?: string;
-  groupId: number;
-  height: number;
-  highlighted: boolean;
-  id: number;
-  incognito: boolean;
-  index: number;
-  lastAccessed: number;
-  mutedInfo: { muted: boolean };
-  pinned: boolean;
-  selected: boolean;
-  status: string;
-  title?: string;
-  url?: string;
-  width: number;
-  windowId: number;
-};
+import { LocalStorageManager, Tab } from "../../manager/local.storage.manager";
+
+const localStorageManager = new LocalStorageManager();
 
 const generateDogGif = async () => {
   const tabs = (await chrome.tabs.query({})) as Tab[];
@@ -30,46 +11,9 @@ const generateDogGif = async () => {
       continue;
     }
 
-    await chrome.storage.local.set({ [tab.id]: true });
-    console.log(`local storage discord set ${tab.id}`);
-
-    if (tab.discarded) {
-      continue;
-    }
-
-    try {
-      await injectIfNotAsync(tab.id || 0);
-    } catch (e) {
-      console.log("failed to inject script on tab:", tab);
-      continue;
-    }
-
-    await chrome.tabs.discard(tab.id);
-    // const response = await chrome.tabs.sendMessage(tab.id || 0, { title: tab.title });
-    // console.log({ response });
+    await localStorageManager.addTabToDiscardedTabs(tab.url);
+    await localStorageManager.injectAndDiscard(tab);
   }
-};
-
-const injectIfNotAsync = async (tabId: number) => {
-  let injected = false;
-  try {
-    await chrome.tabs.sendMessage(tabId, "ping");
-    injected = true;
-  } catch {
-    injected = false;
-  }
-
-  if (injected) {
-    return tabId;
-  }
-
-  await chrome.scripting.executeScript({
-    target: {
-      tabId
-    },
-    files: ["contentScript.js"]
-  });
-  return tabId;
 };
 
 const App = () => {
