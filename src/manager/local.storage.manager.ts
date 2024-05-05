@@ -55,14 +55,18 @@ export class LocalStorageManager {
     }
 
     await chrome.storage.local.set({ [LocalStorageManagerKeys.DISCARDED_TABS]: discardedTabs });
-    console.log(`local storage discoarded set ${tabUrl}`, discardedTabs);
+    console.log(`local storage discarded set ${tabUrl}`, discardedTabs);
   }
 
   async syncStoredDiscardedTabs() {
-    const tabs = await chrome.tabs.query({ discarded: true });
+    const tabs = await chrome.tabs.query({});
+    const discardedTabs = await this.getDiscardedTabs();
 
     await chrome.storage.local.set({
-      [LocalStorageManagerKeys.DISCARDED_TABS]: tabs.map((tab) => tab.url).filter(Boolean)
+      [LocalStorageManagerKeys.DISCARDED_TABS]: tabs
+        .filter((tab) => discardedTabs.includes(tab.url))
+        .map((tab) => tab.url)
+        .filter(Boolean)
     });
   }
 
