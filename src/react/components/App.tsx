@@ -1,4 +1,7 @@
 import { LocalStorageManager, Tab } from "../../manager/local.storage.manager";
+import Grid from "@mui/material/Unstable_Grid2";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 
 import * as styles from "./app.module.scss";
 
@@ -20,10 +23,23 @@ const generateDogGif = async () => {
 
 const App = () => {
   return (
-    <div className={styles.test}>
-      <h1>Optime</h1>
-      <button onClick={generateDogGif}>Generate Dog Gif</button>
-    </div>
+    <Box className={styles.mainContainer} sx={{ flexGrow: 1 }} width={300} textAlign="center">
+      <Grid container spacing={2}>
+        <Grid xs={12}>
+          <h1 className={styles.mainTitle}>Optime</h1>
+        </Grid>
+        <Grid xs={4}>
+          <p>xs=4</p>
+        </Grid>
+        <Grid xs={4}>
+          <p>xs=4</p>
+        </Grid>
+        <Grid xs={8}>
+          <p>xs=8</p>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
+
 export default App;
